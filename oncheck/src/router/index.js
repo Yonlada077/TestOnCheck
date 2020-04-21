@@ -6,10 +6,18 @@ import Status from '../views/Status.vue'
 
 
 import AddCourse from '../views/AddCourse.vue'
+import RegistCourse from '../views/RegistCourse.vue'
 
 import HomeStudent from '../views/HomeStudent.vue'
 import HomeTeacher from '../views/HomeTeacher.vue'
 import store from '../store/index'
+import SubjectDetail from '../views/SubjectDetail.vue'
+
+import CheckStudent from '../views/CheckStudent.vue'
+import CheckSuccessStudent from '../views/CheckSuccessStudent.vue'
+import CheckTeacher from '../views/CheckTeacher.vue'
+import DashboardStudent from '../views/DashboardStudent.vue'
+import DashboardTeacher from '../views/DashboardTeacher.vue'
 
 
 
@@ -45,7 +53,43 @@ Vue.use(VueRouter)
     path: '/addCourse',
     name: 'AddCourse',
     component: AddCourse
+  },
+  {
+    path: '/subjectDetail',
+    name: 'SubjectDetail',
+    component: SubjectDetail
+  },
+  {
+    path: '/registCourse',
+    name: 'RegistCourse',
+    component: RegistCourse
+  },
+  {
+    path: '/checkStudent',
+    name: 'CheckStudent',
+    component: CheckStudent
+  },
+  {
+    path: '/checkSuccessStudent',
+    name: 'CheckSuccessStudent',
+    component: CheckSuccessStudent
+  },
+  {
+    path: '/checkTeacher',
+    name: 'CheckTeacher',
+    component: CheckTeacher
+  },
+  {
+    path: '/dashboardStudent',
+    name: 'DashboardStudent',
+    component: DashboardStudent
+  },
+  {
+    path: '/dashboardTeacher',
+    name: 'DashboardTeacher',
+    component: DashboardTeacher
   }
+  
 ]
 
 const router = new VueRouter({

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="up d-flex justify-center flex-wrap flex-column">
-      <img src="../assets/logo.png" width="200px" class="align-self-center" style="margin:20px;">
+      <img src="../assets/logo1.1.svg" width="200px" class="align-self-center" style="margin:20px;">
       <!-- <v-img
         class="layout"
         src="../assets/logo.png"
@@ -14,15 +14,12 @@
       <div>
         <br />
         <h4 class="text-center">เลือกสถานะ</h4>
-        <br />
-        <v-btn width="170" color="#f7ac80" elevation="3"
-           @click="joinStudent()"><span style="color:white">นักศึกษา</span></v-btn
+        <v-btn width="170" height="50" color="#B7B8BA" elevation="3"
+           @click="joinStudent()" style="color:#ffffff;margin:20px;font-size:1em;">นักศึกษา</v-btn
         >
-        <br />
-        <br />
-
-        <v-btn width="170" color="#c0ba97" elevation="3"
-           @click="joinTeacher()"><span style="color:white">อาจารย์</span></v-btn
+        <br/>
+        <v-btn width="170" height="50" color="#8DAAC8" elevation="3"
+           @click="joinTeacher()" style="color:#ffffff;margin:20px;font-size:1em;">อาจารย์</v-btn
         >
       </div>
     </div>
@@ -56,7 +53,7 @@ export default {
 <style lang="scss" scoped>
 .up {
   height: 50vh;
-  background-color: #f5d6b2;
+  background-color: #ffffff;
 }
 .down {
   height: 50vh;

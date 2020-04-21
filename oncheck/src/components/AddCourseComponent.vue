@@ -24,8 +24,10 @@
           <input type="text" class="form-control" v-model="coursePswd" />
         </div>
         <div class="d-flex justify-content-end">
-          <button type="button" class="btn btn-danger m-3">ยกเลิก</button>
-          <button type="button" class="btn btn-success m-3" @click="insertToCourse()">ตกลง</button>
+          <v-btn width="70" height="40" color="#E97B6E" style="margin:16px" elevation="3" @click="cancleCreateClass()">
+            <span style="color:white">ยกเลิก</span></v-btn>
+            <v-btn width="70" height="40" color="#B9CFA0" style="margin:16px" elevation="3" @click="insertToCourse()">
+            <span style="color:white">ตกลง</span></v-btn>
         </div>
       </form>
     </div>
@@ -58,10 +60,26 @@ export default {
           };
           console.log("in");
           await this.$store.dispatch("addCourse", data)
-          location.reload();
+          // location.reload();
           
           this.isAlert = true;
-      }
+          // clear form
+          this.courseId = ""
+          this.courseName = ""
+          this.courseYear = ""
+          this.coursePswd = ""
+
+
+
+
+          // this.$router.push({ name: "HomeTeacher" });
+          
+      },
+
+     cancleCreateClass() {
+      this.$router.push({ name: "HomeTeacher" });
+    
+  }
   },
 //   mounted() {
 //     firebase.on("value", snapshot => {
@@ -71,5 +89,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+.card {
+    // background-color:#F2F5F9 !important;
+    // border-radius: 25px;
+    box-shadow: 15px 17px 20px -7px rgba(0,0,0,0.34);
+
+}
 </style>

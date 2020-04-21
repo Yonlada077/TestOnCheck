@@ -7,11 +7,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: { 
-    user: null
+    user: null,
+    courses: []
   },
   mutations: {
     ADD_USER(state, data){
       state.user = data;
+    },
+    PUSH_COURSES(state, data){
+      state.courses = data;
     }
   },
   actions: {
@@ -50,7 +54,49 @@ export default new Vuex.Store({
       commit("");
   
 
+    },
+    async getCoursesByEmail({commit}, email){
+      const db = firebase.firestore()
+      let data = []
+      const snapshot = await db
+      .collection("Courses")
+      .where("createdby","==", email)
+      .get();
+      snapshot.forEach(doc => {
+        data.push(doc.data());
+      })
+      commit("PUSH_COURSES", data);
+    },
+    async getCourses({commit}){
+      const db = firebase.firestore()
+      let data = []
+      const snapshot = await db
+      .collection("Courses")
+      .get();
+      snapshot.forEach(doc => {
+        data.push(doc.data());
+      })
+      commit("PUSH_COURSES", data);
+    },
+    async addStudentToClass({commit}, obj){
+      const db = firebase.firestore()
+      let students;
+      const snapshot = await db
+      .collection("Courses")
+      .doc(obj.id).get()
+      students = snapshot.data().students
+      if(!students){
+        students = []
+      }
+      students.push(obj.email)
+      await db
+      .collection("Courses")
+      .doc(obj.id).update({
+        students:students
+      })
+      commit("");
     }
+
 
   },
   modules: {

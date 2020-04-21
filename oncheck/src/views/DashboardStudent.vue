@@ -51,76 +51,133 @@
       </v-list>
     </v-navigation-drawer>
 
-    <div class="bg d-flex align-content-around flex-column">
+    <div class="up d-flex align-content-around flex-column">
       <v-container class="layout">
         <div class="align-self-center text-center mrg-t">
           <HomePhoto></HomePhoto>
         </div>
-
+        <div class="align-self-center" style="width:90%;">
+          <DropdownSubject></DropdownSubject>
+        </div>
         <div class="d-flex justify-content-between" style="margin-top:30px;">
-          <h5 class="text-left" style="opacity:0.5">รายวิชา</h5>
-          <v-btn class="mx-2" fab dark small color="#8DAAC8" elevation="3" @click="RegistClass()">
-            <v-icon dark>mdi-plus</v-icon>
-          </v-btn>
+          <h5 class="text-left" style="opacity:0.5">ประวัติการเช็คชื่อ</h5>
         </div>
 
+        <!-- card ประวัติเช็คชื่อ -->
         <div
           class="d-flex align-items-center flex-column"
-          style="margin-top:15px; overflow-y: scroll; width:100%;"
+          style="margin-top:15px; overflow: scroll; width:100%;"
         >
           <div
             class="card border-0 rounded-pill"
             style="width:100%; margin-bottom: 20px; height:65px;"
-            @click="checkClass()"
-            v-for="(course,index) in courses"
-            :key="index"
           >
             <div class="card-body d-flex justify-content-between">
               <div class="card-title">
-                <h6>{{course.courseId}} {{course.courseName}}</h6>
+                <h6>23 มี.ค. 63 01 : 05 PM</h6>
+              </div>
+              <div>
+                <h6>เช็คชื่อสำเร็จ</h6>
               </div>
             </div>
           </div>
 
+          <div
+            class="card border-0 rounded-pill"
+            style="width:100%; margin-bottom: 20px; height:65px;"
+          >
+            <div class="card-body d-flex justify-content-between">
+              <div class="card-title">
+                <h6>23 มี.ค. 63 01 : 05 PM</h6>
+              </div>
+              <div>
+                <h6>เช็คชื่อสำเร็จ</h6>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="card border-0 rounded-pill"
+            style="width:100%; margin-bottom: 20px; height:65px;"
+          >
+            <div class="card-body d-flex justify-content-between">
+              <div class="card-title">
+                <h6>23 มี.ค. 63 01 : 05 PM</h6>
+              </div>
+              <div>
+                <h6>เช็คชื่อสำเร็จ</h6>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="card border-0 rounded-pill"
+            style="width:100%; margin-bottom: 20px; height:65px;"
+          >
+            <div class="card-body d-flex justify-content-between">
+              <div class="card-title">
+                <h6>23 มี.ค. 63 01 : 05 PM</h6>
+              </div>
+              <div>
+                <h6>เช็คชื่อสำเร็จ</h6>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="card border-0 rounded-pill"
+            style="width:100%; margin-bottom: 20px; height:65px;"
+          >
+            <div class="card-body d-flex justify-content-between">
+              <div class="card-title">
+                <h6>23 มี.ค. 63 01 : 05 PM</h6>
+              </div>
+              <div>
+                <h6>เช็คชื่อสำเร็จ</h6>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="card border-0 rounded-pill"
+            style="width:100%; margin-bottom: 20px; height:65px;"
+          >
+            <div class="card-body d-flex justify-content-between">
+              <div class="card-title">
+                <h6>23 มี.ค. 63 01 : 05 PM</h6>
+              </div>
+              <div>
+                <h6>เช็คชื่อสำเร็จ</h6>
+              </div>
+            </div>
+          </div>
         </div>
       </v-container>
     </div>
   </v-card>
 </template>
 
-
-
 <script>
 import HomePhoto from "@/components/HomePhoto.vue";
+import DropdownSubject from "@/components/DropdownSubject.vue";
 
 export default {
-  name: "HomeStudent",
+  name: "DashboardStudent",
   components: {
-    HomePhoto
+    HomePhoto,
+    DropdownSubject
   },
   data: () => ({
     drawer: false,
-    group: null,
-    courses:[]
+    group: null
   }),
 
-   created() {
-    this.$store.state.courses = []
-    this.getCourses();
-  },
   watch: {
-    $route: "getCourses",
     group() {
       this.drawer = false;
     }
   },
   methods: {
-    async RegistClass() {
-      this.$router.push({ name: "RegistCourse" });
-    },
-    async checkClass() {
-      this.$router.push({ name: "CheckStudent" });
-    },
     goHome() {
       this.$router.push({ name: "HomeStudent" });
     },
@@ -129,33 +186,15 @@ export default {
     },
     logOut() {
       this.$router.push({ name: "Login" });
-    },
-    async getCourses(){
-      await this.$store.dispatch("getCourses")
-      const dumps = this.$store.state.courses;
-      dumps.forEach((dump)=>{
-        if(dump.students){
-          for(let i = 0;i<dump.students.length;i++){
-            if(dump.students[i]==this.$store.state.user.email){
-              this.courses.push(dump)
-            }
-          }
-        }
-        else{
-          if(!this.courses){
-            this.courses = []
-          }
-        }
-      })
-    },
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.bg {
+.up {
+  // height: 100vh;
   background: #ffff;
-  height: 100vh;
 }
 
 .layout {

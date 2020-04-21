@@ -51,113 +51,96 @@
       </v-list>
     </v-navigation-drawer>
 
-    <div class="bg d-flex align-content-around flex-column">
+    <div class="up d-flex align-content-around flex-column">
       <v-container class="layout">
-        <div class="align-self-center text-center mrg-t">
-          <HomePhoto></HomePhoto>
+        <h2 class="text-center mrg-t">Dashboard</h2>
+        <!-- <div class="align-self-center text-center mrg-t">
+        <HomePhoto></HomePhoto>
+        </div>-->
+        <div class="align-self-center" style="width:90%;">
+          <DropdownSubject></DropdownSubject>
+          <SelectDate></SelectDate>
         </div>
-
         <div class="d-flex justify-content-between" style="margin-top:30px;">
-          <h5 class="text-left" style="opacity:0.5">รายวิชา</h5>
-          <v-btn class="mx-2" fab dark small color="#8DAAC8" elevation="3" @click="RegistClass()">
-            <v-icon dark>mdi-plus</v-icon>
-          </v-btn>
+          <h5 class="text-left" style="opacity:0.5; margin-top:5px;">รายชื่อ</h5>
         </div>
 
-        <div
-          class="d-flex align-items-center flex-column"
-          style="margin-top:15px; overflow-y: scroll; width:100%;"
-        >
-          <div
-            class="card border-0 rounded-pill"
-            style="width:100%; margin-bottom: 20px; height:65px;"
-            @click="checkClass()"
-            v-for="(course,index) in courses"
-            :key="index"
-          >
+        <!-- card ประวัติเช็คชื่อ -->
+
+        <div class="d-flex align-items-center flex-column" style="margin-top:15px; overflow-y: auto; width:100%; height:330px;">
+
+          <div class="card border-0 rounded-pill" style="width:100%; margin-bottom: 20px; height:65px;">
             <div class="card-body d-flex justify-content-between">
               <div class="card-title">
-                <h6>{{course.courseId}} {{course.courseName}}</h6>
+                <h6>60070001 กชพร สถาปนเสถียร</h6>
+              </div>
+              <div>
+                <h6>INCLASS</h6>
               </div>
             </div>
           </div>
 
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <v-btn
+            style="margin:20px;"
+            width="100"
+            height="50"
+            color="#8DAAC8"
+            elevation="3"
+            @click="startCheck()"
+          >
+            <span style="color:white">EXPORT</span>
+          </v-btn>
         </div>
       </v-container>
     </div>
   </v-card>
 </template>
 
-
-
 <script>
-import HomePhoto from "@/components/HomePhoto.vue";
+import HomePhoto from '@/components/HomePhoto.vue'
+import DropdownSubject from "@/components/DropdownSubject.vue";
+import SelectDate from "@/components/SelectDate.vue";
 
 export default {
-  name: "HomeStudent",
+  name: "DashboardTeacher",
+
   components: {
-    HomePhoto
+    HomePhoto,
+    DropdownSubject,
+    SelectDate
   },
   data: () => ({
     drawer: false,
-    group: null,
-    courses:[]
+    group: null
   }),
 
-   created() {
-    this.$store.state.courses = []
-    this.getCourses();
-  },
   watch: {
-    $route: "getCourses",
     group() {
       this.drawer = false;
     }
   },
   methods: {
-    async RegistClass() {
-      this.$router.push({ name: "RegistCourse" });
-    },
-    async checkClass() {
-      this.$router.push({ name: "CheckStudent" });
-    },
     goHome() {
-      this.$router.push({ name: "HomeStudent" });
+      this.$router.push({ name: "HomeTeacher" });
     },
     goDashboard() {
-      this.$router.push({ name: "DashboardStudent" });
+      this.$router.push({ name: "DashboardTeacher" });
     },
     logOut() {
       this.$router.push({ name: "Login" });
-    },
-    async getCourses(){
-      await this.$store.dispatch("getCourses")
-      const dumps = this.$store.state.courses;
-      dumps.forEach((dump)=>{
-        if(dump.students){
-          for(let i = 0;i<dump.students.length;i++){
-            if(dump.students[i]==this.$store.state.user.email){
-              this.courses.push(dump)
-            }
-          }
-        }
-        else{
-          if(!this.courses){
-            this.courses = []
-          }
-        }
-      })
-    },
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.bg {
+.up {
+  // height: 100vh;
   background: #ffff;
-  height: 100vh;
 }
-
 .layout {
   height: 100vh;
   display: flex;
@@ -166,7 +149,6 @@ export default {
 .mrg-t {
   margin-top: 5rem !important;
 }
-
 .card {
   background-color: #f2f5f9 !important;
   // border-radius: 25px;

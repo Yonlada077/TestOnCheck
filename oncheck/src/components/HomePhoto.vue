@@ -1,11 +1,10 @@
 <template>
   <div>
 
-      <b-img  rounded="circle" alt="Circle image" class="rounded-circle" :src="user.photoURL" width="150" height="150"></b-img>
+      <b-img  rounded="circle" alt="Circle image" class="rounded-circle" :src="user.photoURL" width="80" height="80"></b-img>
     <br>
     <br>
-    <h4 class="">{{user.displayName}}</h4>
-    <br>
+    <h5 class="">{{user.displayName}}</h5>
     <br>
    </div>  
         

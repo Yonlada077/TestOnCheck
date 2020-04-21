@@ -19,6 +19,6 @@ export default {
 <style scoped lang="scss">
 .bg{
     height: 100vh;
-    background: #f5d6b2;
+    background: #3B5185;
 }
 </style>

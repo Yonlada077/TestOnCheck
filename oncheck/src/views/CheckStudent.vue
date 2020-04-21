@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto overflow-y-auto overflow-x-hidden" height="100vh" width="100%">
+<v-card class="mx-auto overflow-y-auto overflow-x-hidden" height="100vh" width="100%">
     <v-app-bar class="dark-blue accent-4 h-70 d-flex justify-center flex-column position-fixed" dark prominent>
       <v-toolbar-title>
         <img src="../assets/logo2.svg" width="150px" />
@@ -51,75 +51,51 @@
       </v-list>
     </v-navigation-drawer>
 
-    <div class="bg d-flex align-content-around flex-column">
-      <v-container class="layout">
-        <div class="align-self-center text-center mrg-t">
-          <HomePhoto></HomePhoto>
-        </div>
+    <div class="up d-flex flex-column">
+    <v-container class="layout">
+      <div class="align-self-center text-center mrg-t">
+        <HomePhoto></HomePhoto>
+        <Time></Time>
+      </div>
 
-        <div class="d-flex justify-content-between" style="margin-top:30px;">
-          <h5 class="text-left" style="opacity:0.5">รายวิชา</h5>
-          <v-btn class="mx-2" fab dark small color="#8DAAC8" elevation="3" @click="RegistClass()">
-            <v-icon dark>mdi-plus</v-icon>
-          </v-btn>
+      <div class="down d-flex flex-column justify-center align-self-center" style="width:90%">
+        <h4 class="text-center">กรุณาใส่เลข 4 หลัก</h4>
+        <br />
+        <input type="text" class="form-control" />
+        <div class="d-flex justify-center">
+          <v-btn width="100" height="50" color="#B9CFA0" style="margin:16px" elevation="3" @click="SubmitClass()">
+            <span style="color:white">ตกลง</span></v-btn>
         </div>
-
-        <div
-          class="d-flex align-items-center flex-column"
-          style="margin-top:15px; overflow-y: scroll; width:100%;"
-        >
-          <div
-            class="card border-0 rounded-pill"
-            style="width:100%; margin-bottom: 20px; height:65px;"
-            @click="checkClass()"
-            v-for="(course,index) in courses"
-            :key="index"
-          >
-            <div class="card-body d-flex justify-content-between">
-              <div class="card-title">
-                <h6>{{course.courseId}} {{course.courseName}}</h6>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </v-container>
-    </div>
+      </div>
+    </v-container>
+  </div>
   </v-card>
+  
 </template>
-
-
 
 <script>
 import HomePhoto from "@/components/HomePhoto.vue";
+import Time from '@/components/Time.vue';
 
 export default {
-  name: "HomeStudent",
+  name: "CheckStudent",
   components: {
-    HomePhoto
+    HomePhoto,
+    Time
   },
   data: () => ({
     drawer: false,
-    group: null,
-    courses:[]
+    group: null
   }),
 
-   created() {
-    this.$store.state.courses = []
-    this.getCourses();
-  },
   watch: {
-    $route: "getCourses",
     group() {
       this.drawer = false;
     }
   },
   methods: {
-    async RegistClass() {
-      this.$router.push({ name: "RegistCourse" });
-    },
-    async checkClass() {
-      this.$router.push({ name: "CheckStudent" });
+    async SubmitClass() {
+      this.$router.push({ name: "CheckSuccessStudent" });
     },
     goHome() {
       this.$router.push({ name: "HomeStudent" });
@@ -129,48 +105,27 @@ export default {
     },
     logOut() {
       this.$router.push({ name: "Login" });
-    },
-    async getCourses(){
-      await this.$store.dispatch("getCourses")
-      const dumps = this.$store.state.courses;
-      dumps.forEach((dump)=>{
-        if(dump.students){
-          for(let i = 0;i<dump.students.length;i++){
-            if(dump.students[i]==this.$store.state.user.email){
-              this.courses.push(dump)
-            }
-          }
-        }
-        else{
-          if(!this.courses){
-            this.courses = []
-          }
-        }
-      })
-    },
+    }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-.bg {
-  background: #ffff;
-  height: 100vh;
+<style scoped lang="scss">
+.up {
+  height: 50vh;
+  background-color: #ffff;
 }
-
+.down {
+  height: 50vh;
+  width: 100vw;
+}
 .layout {
-  height: 100vh;
+  //   height: 80vh;
   display: flex;
   flex-direction: column;
 }
 .mrg-t {
   margin-top: 5rem !important;
-}
-
-.card {
-  background-color: #f2f5f9 !important;
-  // border-radius: 25px;
-  box-shadow: 7px 17px 8px -7px rgba(0, 0, 0, 0.09);
 }
 .dark-blue {
   background: #3b5185 !important;

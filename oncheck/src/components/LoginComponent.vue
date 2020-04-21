@@ -2,14 +2,14 @@
   <div>
      <br>
         <v-img
-          src="../assets/logo.png"
+          src="../assets/logo1.svg"
           
           aspect-ratio="1.4" contain
         ></v-img>
         <br>
         <br>
         <v-btn color="white"  elevation="3"
-          @click="signIn()">Sign In With Google Account</v-btn
+          @click="signIn()"><span style="color:#3B5185">Sign In With Google Account</span></v-btn
         >
         
   </div>

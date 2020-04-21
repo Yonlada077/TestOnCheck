@@ -21,7 +21,7 @@ export default {
 <style lang="scss" scoped>
 .Login{
     height: 100vh;
-    background-color: #f5d6b2;
+    background-color: #3B5185;
     
 }
 .layout {
