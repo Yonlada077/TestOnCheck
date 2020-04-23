@@ -75,7 +75,7 @@ Vue.use(VueRouter)
     component: CheckSuccessStudent
   },
   {
-    path: '/checkTeacher',
+    path: '/checkTeacher/:id',
     name: 'CheckTeacher',
     component: CheckTeacher
   },

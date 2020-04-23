@@ -152,8 +152,8 @@ created() {
     logOut() {
       this.$router.push({ name: "Login" });
     },
-    async startCheck() {
-      this.$router.push({ name: "CheckTeacher" });
+    startCheck() {
+      this.$router.push({ name: "CheckTeacher" , params:{id:this.$route.params.id}});
     }
   }
 };

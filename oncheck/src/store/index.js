@@ -134,6 +134,12 @@ export default new Vuex.Store({
           students: students
         })
       commit("DELETE_STUDENT", obj)
+    },
+    randNum({commit}, obj){
+      const database = firebase.database()
+      const randNumRef = database.ref('/rand/'+obj.id)
+      randNumRef.set(obj.randNum)
+      commit("")
     }
   },
   modules: {

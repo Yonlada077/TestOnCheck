@@ -61,8 +61,10 @@
         <div
           class="d-flex flex-column justify-center align-items-center align-self-center"
           style="margin-top:80px;"
+          
         >
-          <h1>1 2 3 4</h1>
+          <h1>{{$route.params.id}}</h1>
+          <h1 style="letter-spacing: 5px;">{{randNum}}</h1>
           <br />
           <div class="d-flex justify-center">
             <v-btn width="100" height="50" color="#E97B6E" elevation="3" @click="finish()">
@@ -87,15 +89,27 @@ export default {
   },
   data: () => ({
     drawer: false,
-    group: null
+    group: null,
+    randNum:0
   }),
-
+  created(){
+    this.randNumber()
+  },
   watch: {
+    randNum(){
+      this.$store.dispatch("randNum", {id:this.$route.params.id,randNum:this.randNum})
+    },
     group() {
       this.drawer = false;
     }
   },
   methods: {
+    randNumber(){
+      this.randNum =  Math.floor(10000 + Math.random() * 90000);
+      setInterval(()=>{
+          this.randNum =  Math.floor(10000 + Math.random() * 90000);
+      },10000)
+    },
     async finish() {
       this.$router.push({ name: "DashboardTeacher" });
     },
