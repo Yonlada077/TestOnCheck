@@ -1,6 +1,10 @@
 <template>
   <v-card class="mx-auto overflow-y-auto overflow-x-hidden" height="100vh" width="100%">
-    <v-app-bar class="dark-blue accent-4 h-70 d-flex justify-center flex-column position-fixed" dark prominent>
+    <v-app-bar
+      class="dark-blue accent-4 h-70 d-flex justify-center flex-column position-fixed"
+      dark
+      prominent
+    >
       <v-toolbar-title>
         <img src="../assets/logo2.svg" width="150px" />
       </v-toolbar-title>
@@ -103,8 +107,7 @@ export default {
     group: null,
     courses:[]
   }),
-
-   created() {
+  created() {
     this.$store.state.courses = []
     this.getCourses();
   },
@@ -147,7 +150,7 @@ export default {
           }
         }
       })
-    },
+    }
   }
 };
 </script>

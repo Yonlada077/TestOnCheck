@@ -55,7 +55,7 @@
       <v-container class="layout">
         <div class="align-self-center text-center mrg-t">
           <HomePhoto></HomePhoto>
-          <h6>06016346 Web design and development</h6>
+          <h6>{{course.courseName}}</h6>
         </div>
         <div class="d-flex align-items-center flex-column">
           <v-btn
@@ -81,98 +81,29 @@
           <div
             class="card border-0 rounded-pill"
             style="width:100%; margin-bottom: 20px; height:65px;"
+             v-for="(student,index) in course.students"
+          :key="index"
           >
             <div class="card-body d-flex justify-content-between">
               <!-- <div class="d-flex justify-content-between"> -->
               <div class="card-title">
-                <h6>60070001 กชพร สถาปนเสถียร</h6>
+                <h6>{{student}}</h6>
               </div>
               <div>
-                <img src="../assets/trash.svg" width="25px" style="margin-bottom:20px;" />
+                <button @click="deleteStudent(student)">
+ <img src="../assets/trash.svg" width="25px" style="margin-bottom:20px;"/>
+                </button>
+               
               </div>
               <!-- </div> -->
             </div>
           </div>
 
-          <div
-            class="card border-0 rounded-pill"
-            style="width:100%; margin-bottom: 20px; height:65px;"
-          >
-            <div class="card-body d-flex justify-content-between">
-              <!-- <div class="d-flex justify-content-between"> -->
-              <div class="card-title">
-                <h6>60070001 กชพร สถาปนเสถียร</h6>
-              </div>
-              <div>
-                <img src="../assets/trash.svg" width="25px" style="margin-bottom:20px;" />
-              </div>
-              <!-- </div> -->
-            </div>
-          </div>
+         
 
-          <div
-            class="card border-0 rounded-pill"
-            style="width:100%; margin-bottom: 20px; height:65px;"
-          >
-            <div class="card-body d-flex justify-content-between">
-              <!-- <div class="d-flex justify-content-between"> -->
-              <div class="card-title">
-                <h6>60070001 กชพร สถาปนเสถียร</h6>
-              </div>
-              <div>
-                <img src="../assets/trash.svg" width="25px" style="margin-bottom:20px;" />
-              </div>
-              <!-- </div> -->
-            </div>
-          </div>
 
-          <div
-            class="card border-0 rounded-pill"
-            style="width:100%; margin-bottom: 20px; height:65px;"
-          >
-            <div class="card-body d-flex justify-content-between">
-              <!-- <div class="d-flex justify-content-between"> -->
-              <div class="card-title">
-                <h6>60070001 กชพร สถาปนเสถียร</h6>
-              </div>
-              <div>
-                <img src="../assets/trash.svg" width="25px" style="margin-bottom:20px;" />
-              </div>
-              <!-- </div> -->
-            </div>
-          </div>
-
-          <div
-            class="card border-0 rounded-pill"
-            style="width:100%; margin-bottom: 20px; height:65px;"
-          >
-            <div class="card-body d-flex justify-content-between">
-              <!-- <div class="d-flex justify-content-between"> -->
-              <div class="card-title">
-                <h6>60070001 กชพร สถาปนเสถียร</h6>
-              </div>
-              <div>
-                <img src="../assets/trash.svg" width="25px" style="margin-bottom:20px;" />
-              </div>
-              <!-- </div> -->
-            </div>
-          </div>
-
-          <div
-            class="card border-0 rounded-pill"
-            style="width:100%; margin-bottom: 20px; height:65px;"
-          >
-            <div class="card-body d-flex justify-content-between">
-              <!-- <div class="d-flex justify-content-between"> -->
-              <div class="card-title">
-                <h6>60070001 กชพร สถาปนเสถียร</h6>
-              </div>
-              <div>
-                <img src="../assets/trash.svg" width="25px" style="margin-bottom:20px;" />
-              </div>
-              <!-- </div> -->
-            </div>
-          </div>
+       
+       
         </div>
       </v-container>
     </div>
@@ -189,15 +120,29 @@ export default {
   },
   data: () => ({
     drawer: false,
-    group: null
+    group: null,
+    course:{}
   }),
-
+created() {
+    this.getStudents();
+  },
   watch: {
+    $route: "getStudents",
     group() {
       this.drawer = false;
     }
   },
   methods: {
+    async deleteStudent(student){
+      await this.$store.dispatch("deleteStudent", {id:this.$route.params.id,student})
+    },
+    getStudents(){
+      const id = this.$route.params.id
+      const data = this.$store.state.courses.filter((course)=>{
+        return course.id == id
+      })
+      this.course = data[0]
+    },
     goHome() {
       this.$router.push({ name: "HomeTeacher" });
     },

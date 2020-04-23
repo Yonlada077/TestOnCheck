@@ -74,7 +74,7 @@
             v-for="(course, index) in courses"
             :key="index"
             style="width:100%; margin-bottom: 20px; height:65px;"
-            @click="Class()"
+            @click="Class(course.id)"
           >
             <div class="card-body d-flex justify-content-between">
               <div class="card-title">
@@ -107,7 +107,6 @@ export default {
     }    
   },
   created() {
-    this.$store.state.courses = []
     this.getCourses();
   },
   watch: {
@@ -129,14 +128,12 @@ export default {
     async CreateClass() {
       this.$router.push({ name: "AddCourse" });
     },
-    async Class() {
-      this.$router.push({ name: "SubjectDetail" });
+    async Class(id) {
+      this.$router.push({ name: "SubjectDetail", params:{id} });
     },
     async getCourses(){
-      console.log("in");
       await this.$store.dispatch("getCoursesByEmail", this.user.email)
       this.courses = this.$store.state.courses
-      console.log(this.courses);
     }
   }
 };

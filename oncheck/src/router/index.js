@@ -55,7 +55,7 @@ Vue.use(VueRouter)
     component: AddCourse
   },
   {
-    path: '/subjectDetail',
+    path: '/subjectDetail/:id',
     name: 'SubjectDetail',
     component: SubjectDetail
   },
