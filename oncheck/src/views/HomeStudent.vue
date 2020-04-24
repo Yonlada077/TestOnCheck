@@ -75,9 +75,10 @@
           <div
             class="card border-0 rounded-pill"
             style="width:100%; margin-bottom: 20px; height:65px;"
-            @click="checkClass()"
+          
             v-for="(course,index) in courses"
             :key="index"
+            @click="checkClass(course.id)"
           >
             <div class="card-body d-flex justify-content-between">
               <div class="card-title">
@@ -121,8 +122,10 @@ export default {
     async RegistClass() {
       this.$router.push({ name: "RegistCourse" });
     },
-    async checkClass() {
-      this.$router.push({ name: "CheckStudent" });
+    async checkClass(id) {
+      console.log("In")
+      console.log(id)
+      this.$router.push({ name: "CheckStudent" , params:{id}});
     },
     goHome() {
       this.$router.push({ name: "HomeStudent" });

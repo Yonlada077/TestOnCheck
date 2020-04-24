@@ -69,10 +69,10 @@
 
         <div class="d-flex align-items-center flex-column" style="margin-top:15px; overflow-y: auto; width:100%; height:330px;">
 
-          <div class="card border-0 rounded-pill" style="width:100%; margin-bottom: 20px; height:65px;">
+          <div v-for="(student, index) in students" :key="index" class="card border-0 rounded-pill" style="width:100%; margin-bottom: 20px; height:65px;">
             <div class="card-body d-flex justify-content-between">
               <div class="card-title">
-                <h6>60070001 กชพร สถาปนเสถียร</h6>
+                <h6>{{student}}</h6>
               </div>
               <div>
                 <h6>INCLASS</h6>
@@ -114,15 +114,22 @@ export default {
   },
   data: () => ({
     drawer: false,
-    group: null
+    group: null,
+    students:null
   }),
-
+  created(){
+    this.getStudents()
+  },
   watch: {
     group() {
       this.drawer = false;
     }
   },
   methods: {
+    async getStudents(){
+      await this.$store.dispatch("getStudents", this.$route.params.id)
+      this.students = this.$store.state.students
+    },
     goHome() {
       this.$router.push({ name: "HomeTeacher" });
     },

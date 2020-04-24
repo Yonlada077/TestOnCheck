@@ -8,7 +8,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: null,
-    courses: []
+    courses: [],
+    students:null
   },
   mutations: {
     ADD_USER(state, data) {
@@ -30,7 +31,10 @@ export default new Vuex.Store({
       course.students = student
 
       state.courses.push(course)
-    }
+    },
+    PUSH_STUDENTS(state, data) {
+       state.students = data
+     }
   },
   actions: {
     async addTypeUser({ commit }, obj) {
@@ -140,6 +144,31 @@ export default new Vuex.Store({
       const randNumRef = database.ref('/rand/'+obj.id)
       randNumRef.set(obj.randNum)
       commit("")
+    },
+    async checkCode({commit},obj){
+      const database = firebase.database()
+      const randNumRef = database.ref('/rand/'+obj.id)
+      const studentRef = database.ref('/student/'+obj.id)
+      const snapshot = await randNumRef.once('value')
+      if(snapshot.val() == obj.code){
+        studentRef.push(obj.email.slice(0,8))
+      }
+      else{
+        alert("incorrect code")
+      }
+      commit("")
+    },
+   async getStudents({commit},id){
+      const database = firebase.database()
+      const listStudents = []
+      const studentRef = database.ref('/student/'+id)
+      const snapshot = await studentRef.once('value')
+      console.log(snapshot)
+      snapshot.forEach(function(childSnapshot) {
+        listStudents.push(childSnapshot.val());
+      });
+      console.log(listStudents)
+      commit("PUSH_STUDENTS", listStudents)
     }
   },
   modules: {

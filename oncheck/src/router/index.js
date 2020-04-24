@@ -65,7 +65,7 @@ Vue.use(VueRouter)
     component: RegistCourse
   },
   {
-    path: '/checkStudent',
+    path: '/checkStudent/:id',
     name: 'CheckStudent',
     component: CheckStudent
   },
@@ -85,7 +85,7 @@ Vue.use(VueRouter)
     component: DashboardStudent
   },
   {
-    path: '/dashboardTeacher',
+    path: '/dashboardTeacher/:id',
     name: 'DashboardTeacher',
     component: DashboardTeacher
   }

@@ -59,9 +59,9 @@
       </div>
 
       <div class="down d-flex flex-column justify-center align-self-center" style="width:90%">
-        <h4 class="text-center">กรุณาใส่เลข 4 หลัก</h4>
+        <h4 class="text-center">กรุณาใส่เลข 4 หลัก <br>{{$route.params.id}}</h4>
         <br />
-        <input type="text" class="form-control" />
+        <input type="text" class="form-control" v-model="code"/>
         <div class="d-flex justify-center">
           <v-btn width="100" height="50" color="#B9CFA0" style="margin:16px" elevation="3" @click="SubmitClass()">
             <span style="color:white">ตกลง</span></v-btn>
@@ -85,7 +85,8 @@ export default {
   },
   data: () => ({
     drawer: false,
-    group: null
+    group: null,
+    code:0
   }),
 
   watch: {
@@ -95,13 +96,14 @@ export default {
   },
   methods: {
     async SubmitClass() {
+      await this.$store.dispatch("checkCode", {id:this.$route.params.id,code:this.code,email:this.$store.state.user.email})
       this.$router.push({ name: "CheckSuccessStudent" });
     },
     goHome() {
       this.$router.push({ name: "HomeStudent" });
     },
     goDashboard() {
-      this.$router.push({ name: "DashboardStudent" });
+      this.$router.push({ name: "DashboardStudent", params:{id:this.$route.params.id} });
     },
     logOut() {
       this.$router.push({ name: "Login" });

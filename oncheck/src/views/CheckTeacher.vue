@@ -63,7 +63,6 @@
           style="margin-top:80px;"
           
         >
-          <h1>{{$route.params.id}}</h1>
           <h1 style="letter-spacing: 5px;">{{randNum}}</h1>
           <br />
           <div class="d-flex justify-center">
@@ -111,13 +110,13 @@ export default {
       },10000)
     },
     async finish() {
-      this.$router.push({ name: "DashboardTeacher" });
+      this.$router.push({ name: "DashboardTeacher"  , params:{id:this.$route.params.id}});
     },
     goHome() {
       this.$router.push({ name: "HomeTeacher" });
     },
     goDashboard() {
-      this.$router.push({ name: "DashboardTeacher" });
+      this.$router.push({ name: "DashboardTeacher"});
     },
     logOut() {
       this.$router.push({ name: "Login" });
