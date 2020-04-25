@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Status from '../views/Status.vue'
 
@@ -12,7 +11,6 @@ import HomeStudent from '../views/HomeStudent.vue'
 import HomeTeacher from '../views/HomeTeacher.vue'
 import store from '../store/index'
 import SubjectDetail from '../views/SubjectDetail.vue'
-
 import CheckStudent from '../views/CheckStudent.vue'
 import CheckSuccessStudent from '../views/CheckSuccessStudent.vue'
 import CheckTeacher from '../views/CheckTeacher.vue'
@@ -26,11 +24,6 @@ Vue.use(VueRouter)
   const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/login',
     name: 'Login',
     component: Login
   },
