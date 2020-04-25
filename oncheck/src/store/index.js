@@ -1,17 +1,20 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import firebase from 'firebase'
-import createPersistedState from "vuex-persistedstate"
-
-Vue.use(Vuex)
+import Vue from "vue";
+import Vuex from "vuex";
+import firebase from "firebase";
+import createPersistedState from "vuex-persistedstate";
+import moment from "moment";
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     user: null,
     courses: [],
-    students:null
+    students: null,
   },
   mutations: {
+    CLEAR_USER(state){
+      state.user = null
+    },
     ADD_USER(state, data) {
       state.user = data;
     },
@@ -19,29 +22,29 @@ export default new Vuex.Store({
       state.courses = data;
     },
     DELETE_STUDENT(state, data) {
-     let course = state.courses.filter((course)=>{
-        return course.id == data.id
+      let course = state.courses.filter((course) => {
+        return course.id == data.id;
       });
 
-      course = course[0]
-      const student = course.students.filter((email)=>{
-        return email != data.student
-      })
+      course = course[0];
+      const student = course.students.filter((email) => {
+        return email != data.student;
+      });
 
-      course.students = student
+      course.students = student;
 
-      state.courses.push(course)
+      state.courses.push(course);
     },
     PUSH_STUDENTS(state, data) {
-       state.students = data
-     }
+      state.students = data;
+    },
   },
   actions: {
     async addTypeUser({ commit }, obj) {
-      const db = firebase.firestore()
+      const db = firebase.firestore();
       const ref = db.collection("User_data").doc();
       const Id = ref.id;
-      const data = { email: obj.email, type: obj.type, userId: Id }
+      const data = { email: obj.email, type: obj.type, userId: Id };
       await db
         .collection("User_data")
         .doc(Id)
@@ -49,129 +52,198 @@ export default new Vuex.Store({
       commit("");
     },
     async getUser({ commit }) {
-      const db = firebase.firestore()
-      let data = []
-      const snapshot = await db
-        .collection("User_data")
-        .get();
-      snapshot.forEach(doc => {
+      const db = firebase.firestore();
+      let data = [];
+      const snapshot = await db.collection("User_data").get();
+      snapshot.forEach((doc) => {
         data.push(doc.data());
-      })
+      });
       commit("");
-      return data
+      return data;
     },
     async addCourse({ commit }, obj) {
-      const db = firebase.firestore()
+      const db = firebase.firestore();
       const ref = db.collection("Courses").doc();
       const Id = ref.id;
-      const data = { id: Id, ...obj }
+      const data = { id: Id, ...obj };
       await db
         .collection("Courses")
         .doc(Id)
         .set(data);
       commit("");
-
-
     },
     async getCoursesByEmail({ commit }, email) {
-      const db = firebase.firestore()
-      let data = []
+      const db = firebase.firestore();
+      let data = [];
       const snapshot = await db
         .collection("Courses")
         .where("createdby", "==", email)
         .get();
-      snapshot.forEach(doc => {
+      snapshot.forEach((doc) => {
         data.push(doc.data());
-      })
+      });
       commit("PUSH_COURSES", data);
     },
     async getCourses({ commit }) {
-      const db = firebase.firestore()
-      let data = []
-      const snapshot = await db
-        .collection("Courses")
-        .get();
-      snapshot.forEach(doc => {
+      const db = firebase.firestore();
+      let data = [];
+      const snapshot = await db.collection("Courses").get();
+      snapshot.forEach((doc) => {
         data.push(doc.data());
-      })
+      });
       commit("PUSH_COURSES", data);
     },
     async addStudentToClass({ commit }, obj) {
-      const db = firebase.firestore()
+      const db = firebase.firestore();
       let students;
       const snapshot = await db
         .collection("Courses")
-        .doc(obj.id).get()
-      students = snapshot.data().students
+        .doc(obj.id)
+        .get();
+      students = snapshot.data().students;
       if (!students) {
-        students = []
+        students = [];
       }
-      if(students.indexOf(obj.email) == -1){
-        students.push(obj.email)
+      if (students.indexOf(obj.email) == -1) {
+        students.push(obj.email);
         await db
           .collection("Courses")
-          .doc(obj.id).update({
-            students: students
-          })
+          .doc(obj.id)
+          .update({
+            students: students,
+          });
+      } else {
+        alert("Students already in class");
       }
-      else{
-        alert("Students already in class")
-      }
-     
+
       commit("");
-    }
-    ,
-    async deleteStudent({commit}, obj){
-      const db = firebase.firestore()
+    },
+    async deleteStudent({ commit }, obj) {
+      const db = firebase.firestore();
       let students;
       const snapshot = await db
         .collection("Courses")
-        .doc(obj.id).get()
-      students = snapshot.data().students
+        .doc(obj.id)
+        .get();
+      students = snapshot.data().students;
 
-      students = students.filter((email)=>{
-        return email != obj.student
-      })
+      students = students.filter((email) => {
+        return email != obj.student;
+      });
       await db
         .collection("Courses")
-        .doc(obj.id).update({
-          students: students
-        })
-      commit("DELETE_STUDENT", obj)
+        .doc(obj.id)
+        .update({
+          students: students,
+        });
+      commit("DELETE_STUDENT", obj);
     },
-    randNum({commit}, obj){
-      const database = firebase.database()
-      const randNumRef = database.ref('/rand/'+obj.id)
-      randNumRef.set(obj.randNum)
-      commit("")
+    randNum({ commit }, obj) {
+      const database = firebase.database();
+      const randNumRef = database.ref("/rand/" + obj.id);
+      randNumRef.set(obj.randNum);
+      commit("");
     },
-    async checkCode({commit},obj){
-      const database = firebase.database()
-      const randNumRef = database.ref('/rand/'+obj.id)
-      const studentRef = database.ref('/student/'+obj.id)
-      const snapshot = await randNumRef.once('value')
-      if(snapshot.val() == obj.code){
-        studentRef.push(obj.email.slice(0,8))
+    async checkCode({ commit }, obj) {
+      const database = firebase.database();
+      const db = firebase.firestore();
+      let emails = [];
+      // const date = moment().subtract(10, 'days').calendar(moment().format('L'));
+      const date = moment().format('L')
+      const randNumRef = database.ref("/rand/" + obj.id);
+      const snapshotRand = await randNumRef.once("value");
+      const snapshot_col = await db
+      .collection("StudentsInClass")
+      .get();
+      let id;
+      snapshot_col.forEach((doc)=>{
+        if(doc.exists){
+          if(doc.data().classId == obj.id){
+            if(doc.data().date == date){
+              id = doc.data().id
+            }
+            else{
+              id = "dummyId"
+            }
+        }
+        }else{
+          id = "dummyId"
+        }
+      })
+      let snapshot;
+      if (snapshotRand.val() == obj.code) {
+        snapshot = await db
+          .collection("StudentsInClass")
+          .doc(id)
+          .get();
+        if (!snapshot.exists) {
+          // Create new obj
+          const ref = db.collection("StudentsInClass").doc();
+          const Id = ref.id;
+          emails.push(obj.email.slice(0, 8));
+          snapshot = await db
+            .collection("StudentsInClass")
+            .doc(Id)
+            .set({
+              id:Id,
+              classId: obj.id,
+              students: emails,
+              date,
+            });
+        } else {
+          // Update obj
+          emails = snapshot.data().students;
+          let time = snapshot.data().date
+          if(time == date){
+            if (emails.indexOf(obj.email) == -1) {
+              emails.push(obj.email.slice(0, 8));
+              await db
+                .collection("StudentsInClass")
+                .doc(id)
+                .update({
+                  students: emails,
+                });
+            } else {
+              alert("Students already in class");
+            }
+          }else{
+            // Create new obj
+            emails = []
+            const ref = db.collection("StudentsInClass").doc();
+            const Id = ref.id;
+            emails.push(obj.email.slice(0, 8));
+            snapshot = await db
+              .collection("StudentsInClass")
+              .doc(Id)
+              .set({
+                id:Id,
+                classId: obj.id,
+                students: emails,
+                date,
+              });
+          }
+        
+        }
+      } else {
+        alert("incorrect code");
       }
-      else{
-        alert("incorrect code")
-      }
-      commit("")
+      commit("");
     },
-   async getStudents({commit},id){
-      const database = firebase.database()
-      const listStudents = []
-      const studentRef = database.ref('/student/'+id)
-      const snapshot = await studentRef.once('value')
-      console.log(snapshot)
-      snapshot.forEach(function(childSnapshot) {
-        listStudents.push(childSnapshot.val());
+    async getStudents({ commit }, id) {
+      const db = firebase.firestore();
+      const listStudents = [];
+      const snapshot = await db
+      .collection("StudentsInClass")
+      .doc(id)
+      .get();
+      
+      snapshot.data().students.forEach((student)=> {
+        listStudents.push(student);
       });
-      console.log(listStudents)
-      commit("PUSH_STUDENTS", listStudents)
-    }
+      console.log(listStudents);
+      commit("PUSH_STUDENTS", listStudents);
+    },
   },
-  modules: {
-  },
-  plugins: [createPersistedState()]
-})
+  modules: {},
+  plugins: [createPersistedState()],
+});

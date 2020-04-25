@@ -103,7 +103,7 @@
 import HomePhoto from '@/components/HomePhoto.vue'
 import DropdownSubject from "@/components/DropdownSubject.vue";
 import SelectDate from "@/components/SelectDate.vue";
-
+import firebase from 'firebase'
 export default {
   name: "DashboardTeacher",
 
@@ -136,7 +136,9 @@ export default {
     goDashboard() {
       this.$router.push({ name: "DashboardTeacher" });
     },
-    logOut() {
+    async logOut() {
+       await firebase.auth().signOut()
+       this.$store.commit("CLEAR_USER")
       this.$router.push({ name: "Login" });
     }
   }

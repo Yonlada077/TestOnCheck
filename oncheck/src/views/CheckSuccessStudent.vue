@@ -79,7 +79,7 @@
 
 <script>
 import HomePhoto from "@/components/HomePhoto.vue";
-
+import firebase from 'firebase'
 export default {
   name: "CheckSuccessStudent",
   components: {
@@ -105,7 +105,9 @@ export default {
     goDashboard() {
       this.$router.push({ name: "DashboardStudent" });
     },
-    logOut() {
+    async logOut() {
+       await firebase.auth().signOut()
+      this.$store.commit("CLEAR_USER")
       this.$router.push({ name: "Login" });
     }
   }

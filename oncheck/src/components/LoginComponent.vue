@@ -25,8 +25,6 @@ export default {
           const result = await firebase.auth().signInWithPopup(provider)
           let flag = true
           if(result){
-            console.log(result.user.photoURL)
-
               this.$store.commit("ADD_USER", result.user)
               const datas = await this.$store.dispatch("getUser")
               
