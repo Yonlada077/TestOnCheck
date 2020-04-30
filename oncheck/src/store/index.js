@@ -168,21 +168,15 @@ export default new Vuex.Store({
       const snapshot_col = await db.collection("StudentsInClass").get();
       let id = "dummyId";
       snapshot_col.forEach((doc) => {
-        console.log("In Loop")
         if (doc.exists) {
           if (doc.data().classId == obj.id) {
             if (doc.data().date == date) {
               id = doc.data().id;
-            } else {
-              id = "dummyId";
             }
-          }else{
-            id = "dummyId";
           }
-        } else {
-          id = "dummyId";
         }
       });
+      console.log(id)
       let snapshot;
       if (snapshotRand.val() == obj.code) {
         snapshot = await db
@@ -208,7 +202,7 @@ export default new Vuex.Store({
           emails = snapshot.data().students;
           let time = snapshot.data().date;
           if (time == date) {
-            if (emails.indexOf(obj.email) == -1) {
+            if (emails.indexOf(obj.email.slice(0, 8)) == -1) {
               emails.push(obj.email.slice(0, 8));
               await db
                 .collection("StudentsInClass")
@@ -219,21 +213,6 @@ export default new Vuex.Store({
             } else {
               alert("Students already in class");
             }
-          } else {
-            // Create new obj
-            emails = [];
-            const ref = db.collection("StudentsInClass").doc();
-            const Id = ref.id;
-            emails.push(obj.email.slice(0, 8));
-            snapshot = await db
-              .collection("StudentsInClass")
-              .doc(Id)
-              .set({
-                id: Id,
-                classId: obj.id,
-                students: emails,
-                date,
-              });
           }
         }
       } else {
