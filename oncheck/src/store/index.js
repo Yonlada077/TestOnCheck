@@ -10,10 +10,23 @@ export default new Vuex.Store({
     user: null,
     courses: [],
     students: null,
+    isSearch:false,
   },
   mutations: {
-    CLEAR_USER(state){
-      state.user = null
+    CLEAR_STATE(state) {
+      let clearstate = {
+        user: null,
+        courses: [],
+        students: null,
+        isSearch:false,
+      };
+      Object.assign(state, clearstate);
+    },
+    SET_TRUE_SEARCH(state){
+      state.isSearch = true 
+    },
+    SET_FLASE_SEARCH(state){
+      state.isSearch = false
     },
     ADD_USER(state, data) {
       state.user = data;
@@ -35,7 +48,7 @@ export default new Vuex.Store({
 
       state.courses.push(course);
     },
-    PUSH_STUDENTS(state, data) {
+    SET_STUDENTS(state, data) {
       state.students = data;
     },
   },
@@ -149,27 +162,27 @@ export default new Vuex.Store({
       const db = firebase.firestore();
       let emails = [];
       // const date = moment().subtract(10, 'days').calendar(moment().format('L'));
-      const date = moment().format('L')
+      const date = moment().format("L");
       const randNumRef = database.ref("/rand/" + obj.id);
       const snapshotRand = await randNumRef.once("value");
-      const snapshot_col = await db
-      .collection("StudentsInClass")
-      .get();
-      let id;
-      snapshot_col.forEach((doc)=>{
-        if(doc.exists){
-          if(doc.data().classId == obj.id){
-            if(doc.data().date == date){
-              id = doc.data().id
+      const snapshot_col = await db.collection("StudentsInClass").get();
+      let id = "dummyId";
+      snapshot_col.forEach((doc) => {
+        console.log("In Loop")
+        if (doc.exists) {
+          if (doc.data().classId == obj.id) {
+            if (doc.data().date == date) {
+              id = doc.data().id;
+            } else {
+              id = "dummyId";
             }
-            else{
-              id = "dummyId"
-            }
+          }else{
+            id = "dummyId";
+          }
+        } else {
+          id = "dummyId";
         }
-        }else{
-          id = "dummyId"
-        }
-      })
+      });
       let snapshot;
       if (snapshotRand.val() == obj.code) {
         snapshot = await db
@@ -185,7 +198,7 @@ export default new Vuex.Store({
             .collection("StudentsInClass")
             .doc(Id)
             .set({
-              id:Id,
+              id: Id,
               classId: obj.id,
               students: emails,
               date,
@@ -193,8 +206,8 @@ export default new Vuex.Store({
         } else {
           // Update obj
           emails = snapshot.data().students;
-          let time = snapshot.data().date
-          if(time == date){
+          let time = snapshot.data().date;
+          if (time == date) {
             if (emails.indexOf(obj.email) == -1) {
               emails.push(obj.email.slice(0, 8));
               await db
@@ -206,9 +219,9 @@ export default new Vuex.Store({
             } else {
               alert("Students already in class");
             }
-          }else{
+          } else {
             // Create new obj
-            emails = []
+            emails = [];
             const ref = db.collection("StudentsInClass").doc();
             const Id = ref.id;
             emails.push(obj.email.slice(0, 8));
@@ -216,34 +229,69 @@ export default new Vuex.Store({
               .collection("StudentsInClass")
               .doc(Id)
               .set({
-                id:Id,
+                id: Id,
                 classId: obj.id,
                 students: emails,
                 date,
               });
           }
-        
         }
       } else {
         alert("incorrect code");
       }
       commit("");
     },
-    async getStudents({ commit }, id) {
+    async getStudents({ commit, getters }, id) {
       const db = firebase.firestore();
       const listStudents = [];
-      const snapshot = await db
-      .collection("StudentsInClass")
-      .doc(id)
-      .get();
-      
-      snapshot.data().students.forEach((student)=> {
+      if(!getters.getIsSearch()){
+        console.log("In")
+        const snapshot = await db
+        .collection("StudentsInClass")
+        .doc(id)
+        .get();
+      snapshot.data().students.forEach((student) => {
         listStudents.push(student);
       });
-      console.log(listStudents);
-      commit("PUSH_STUDENTS", listStudents);
+      commit("SET_STUDENTS", listStudents);
+      }
+      commit("")
     },
+    async getStudentsFromDate({commit},obj){
+      const db = firebase.firestore();
+      let listStudents = [];
+      const datas = [] 
+      const snapshot = await db
+        .collection("StudentsInClass")
+        .get();
+      snapshot.forEach((doc) => {
+         datas.push(doc.data())
+      });
+      const data = datas.filter((d)=>{
+        return d.classId == obj.id && d.date == obj.date
+      })
+      if(data[0]){
+        // console.log(data[0].students)
+        listStudents = data[0].students
+        commit("SET_TRUE_SEARCH")
+        commit("SET_STUDENTS", listStudents)
+      }
+      else{
+        alert("Not Students In Class")
+        commit("SET_TRUE_SEARCH")
+        commit("SET_STUDENTS",[])
+      }
+     
+    }
   },
   modules: {},
+  getters:{
+    getIsSearch:state=>()=>{
+      return state.isSearch;
+    },
+    getStudents:state=>()=>{
+      return state.students;
+    }
+  },
   plugins: [createPersistedState()],
 });

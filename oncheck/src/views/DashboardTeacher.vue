@@ -59,7 +59,7 @@
         </div>-->
         <div class="align-self-center" style="width:90%;">
           <DropdownSubject></DropdownSubject>
-          <SelectDate></SelectDate>
+          <!-- <SelectDate></SelectDate> -->
         </div>
         <div class="d-flex justify-content-between" style="margin-top:30px;">
           <h5 class="text-left" style="opacity:0.5; margin-top:5px;">รายชื่อ</h5>
@@ -102,7 +102,7 @@
 <script>
 import HomePhoto from '@/components/HomePhoto.vue'
 import DropdownSubject from "@/components/DropdownSubject.vue";
-import SelectDate from "@/components/SelectDate.vue";
+// import SelectDate from "@/components/SelectDate.vue";
 import firebase from 'firebase'
 export default {
   name: "DashboardTeacher",
@@ -110,7 +110,7 @@ export default {
   components: {
     HomePhoto,
     DropdownSubject,
-    SelectDate
+    // SelectDate
   },
   data: () => ({
     drawer: false,
@@ -123,12 +123,13 @@ export default {
   watch: {
     group() {
       this.drawer = false;
-    }
+    },
   },
   methods: {
     async getStudents(){
       await this.$store.dispatch("getStudents", this.$route.params.id)
-      this.students = this.$store.state.students
+      this.students = this.$store.getters.getStudents()
+      console.log(this.students)
     },
     goHome() {
       this.$router.push({ name: "HomeTeacher" });
@@ -138,7 +139,7 @@ export default {
     },
     async logOut() {
        await firebase.auth().signOut()
-       this.$store.commit("CLEAR_USER")
+          this.$store.commit("CLEAR_STATE") 
       this.$router.push({ name: "Login" });
     }
   }

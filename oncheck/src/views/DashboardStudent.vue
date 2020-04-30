@@ -186,7 +186,7 @@ export default {
     },
     async logOut() {
        await firebase.auth().signOut()
-      this.$store.commit("CLEAR_USER")
+           this.$store.commit("CLEAR_STATE")
       this.$router.push({ name: "Login" });
     }
   }

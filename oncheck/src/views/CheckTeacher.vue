@@ -110,6 +110,7 @@ export default {
       },10000)
     },
     async finish() {
+      this.$store.commit("SET_FLASE_SEARCH")
       this.$router.push({ name: "DashboardTeacher"  , params:{id:this.$route.params.id}});
     },
     goHome() {
@@ -120,7 +121,7 @@ export default {
     },
     async logOut() {
        await firebase.auth().signOut()
-       this.$store.commit("CLEAR_USER")
+             this.$store.commit("CLEAR_STATE")
       this.$router.push({ name: "Login" });
     }
   }
