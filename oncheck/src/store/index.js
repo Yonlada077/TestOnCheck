@@ -25,7 +25,7 @@ export default new Vuex.Store({
     SET_TRUE_SEARCH(state){
       state.isSearch = true 
     },
-    SET_FLASE_SEARCH(state){
+    SET_FALSE_SEARCH(state){
       state.isSearch = false
     },
     ADD_USER(state, data) {
@@ -241,23 +241,27 @@ export default new Vuex.Store({
       }
       commit("");
     },
-    async getStudents({ commit, getters }, id) {
-      const db = firebase.firestore();
-      const listStudents = [];
-      if(!getters.getIsSearch()){
-        console.log("In")
-        const snapshot = await db
-        .collection("StudentsInClass")
-        .doc(id)
-        .get();
-      snapshot.data().students.forEach((student) => {
-        listStudents.push(student);
-      });
-      commit("SET_STUDENTS", listStudents);
-      }
-      commit("")
-    },
+    // async getStudents({ commit, getters }, id) {
+    //   const db = firebase.firestore();
+    //   const listStudents = [];
+    //   if(!getters.getIsSearch()){
+    //     const snapshot = await db
+    //     .collection("StudentsInClass")
+    //     .doc(id)
+    //     .get();
+    //   snapshot.data().students.forEach((student) => {
+    //     listStudents.push(student);
+    //   });
+    //   console.log(listStudents)
+    //   commit("SET_STUDENTS", listStudents);
+    //   }
+    //   else{
+    //     commit("")
+    //   }
+      
+    // },
     async getStudentsFromDate({commit},obj){
+      console.log(obj)
       const db = firebase.firestore();
       let listStudents = [];
       const datas = [] 

@@ -103,6 +103,7 @@
 import HomePhoto from '@/components/HomePhoto.vue'
 import DropdownSubject from "@/components/DropdownSubject.vue";
 // import SelectDate from "@/components/SelectDate.vue";
+import moment from "moment";
 import firebase from 'firebase'
 export default {
   name: "DashboardTeacher",
@@ -127,9 +128,10 @@ export default {
   },
   methods: {
     async getStudents(){
-      await this.$store.dispatch("getStudents", this.$route.params.id)
+      this.$store.commit("SET_FALSE_SEARCH")
+      await this.$store.dispatch("getStudentsFromDate", {id:this.$route.params.id, date: moment().format("L")})
       this.students = this.$store.getters.getStudents()
-      console.log(this.students)
+      console.log("student", this.students)
     },
     goHome() {
       this.$router.push({ name: "HomeTeacher" });
