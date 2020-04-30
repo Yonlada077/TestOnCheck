@@ -128,8 +128,9 @@ export default {
   },
   methods: {
     async getStudents(){
-      this.$store.commit("SET_FALSE_SEARCH")
-      await this.$store.dispatch("getStudentsFromDate", {id:this.$route.params.id, date: moment().format("L")})
+      if(!this.$store.getters.getIsSearch){
+        await this.$store.dispatch("getStudentsFromDate", {id:this.$route.params.id, date: moment().format("L")})
+      }
       this.students = this.$store.getters.getStudents()
       console.log("student", this.students)
     },

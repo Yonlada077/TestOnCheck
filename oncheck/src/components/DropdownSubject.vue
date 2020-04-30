@@ -86,6 +86,7 @@ export default {
         // console.log(typeof(this.dateFormatted))
         let date = this.dateFormatted.split("/")
         date = date[1]+"/"+date[0]+"/"+date[2]
+        this.$store.commit("SET_TRUE_SEARCH")
         await this.$store.dispatch("getStudentsFromDate",{id:course.id, date})
         location.reload()
       } else {

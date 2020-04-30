@@ -277,12 +277,10 @@ export default new Vuex.Store({
       if(data[0]){
         // console.log(data[0].students)
         listStudents = data[0].students
-        commit("SET_TRUE_SEARCH")
         commit("SET_STUDENTS", listStudents)
       }
       else{
         alert("Not Students In Class")
-        commit("SET_TRUE_SEARCH")
         commit("SET_STUDENTS",[])
       }
      

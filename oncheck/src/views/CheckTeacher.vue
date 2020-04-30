@@ -110,6 +110,7 @@ export default {
       },10000)
     },
     async finish() {
+      this.$store.commit("SET_FALSE_SEARCH")
       this.$router.push({ name: "DashboardTeacher"  , params:{id:this.$route.params.id}});
     },
     goHome() {
