@@ -97,6 +97,7 @@ export default {
   },
   methods: {
     async dashboardStu() {
+      await this.$store.dispatch("getHistory",{classId:this.$route.params.id,email:this.$store.state.user.email})
       this.$router.push({ name: "DashboardStudent" });
     },
     goHome() {
@@ -106,8 +107,8 @@ export default {
       this.$router.push({ name: "DashboardStudent" });
     },
     async logOut() {
-       await firebase.auth().signOut()
-            this.$store.commit("CLEAR_STATE")
+      await firebase.auth().signOut()
+      this.$store.commit("CLEAR_STATE")
       this.$router.push({ name: "Login" });
     }
   }

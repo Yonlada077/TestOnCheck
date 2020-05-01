@@ -11,6 +11,7 @@ export default new Vuex.Store({
     courses: [],
     students: null,
     isSearch:false,
+    histories:[]
   },
   mutations: {
     CLEAR_STATE(state) {
@@ -19,6 +20,7 @@ export default new Vuex.Store({
         courses: [],
         students: null,
         isSearch:false,
+        histories:[]
       };
       Object.assign(state, clearstate);
     },
@@ -27,6 +29,9 @@ export default new Vuex.Store({
     },
     SET_FALSE_SEARCH(state){
       state.isSearch = false
+    },
+    SET_HISTORY(state, data){
+      state.histories = data
     },
     ADD_USER(state, data) {
       state.user = data;
@@ -243,7 +248,6 @@ export default new Vuex.Store({
       
     // },
     async getStudentsFromDate({commit},obj){
-      console.log(obj)
       const db = firebase.firestore();
       let listStudents = [];
       const datas = [] 
@@ -266,7 +270,71 @@ export default new Vuex.Store({
         commit("SET_STUDENTS",[])
       }
      
-    }
+    },
+
+   async addHistory({commit}, obj){
+    const db = firebase.firestore();
+    const snapshot_col = await db.collection("StudentHistory").get();
+    let times = []
+    let id = "dummyId";
+    snapshot_col.forEach((doc) => {
+      if (doc.exists) {
+        if (doc.data().classId == obj.classId) {
+          if (doc.data().email == obj.email) {
+            id = doc.data().id;
+          }
+        }
+      }
+    });
+    // End if
+    let snapshot = await db
+    .collection("StudentHistory")
+    .doc(id)
+    .get();
+
+    if (!snapshot.exists) {
+      // Create new obj
+      const ref = db.collection("StudentHistory").doc();
+      const Id = ref.id;
+     times.push(obj.date);
+      snapshot = await db
+        .collection("StudentHistory")
+        .doc(Id)
+        .set({
+          id: Id,
+          classId: obj.classId,
+          times,
+          email:obj.email,
+        }); 
+    }else{
+      times = snapshot.data().times;
+      if (times.indexOf(obj.date == -1)) {
+       times.push(obj.date);
+          await db
+            .collection("StudentHistory")
+            .doc(id)
+            .update({
+              times,
+          });
+        }
+    } // End else
+    commit("")
+   },
+   async getHistory({commit}, obj){
+    const db = firebase.firestore();
+    const snapshot = await db.collection("StudentHistory").get();
+    let times = [];
+    snapshot.forEach((doc) => {
+      if (doc.exists) {
+        if (doc.data().classId == obj.classId) {
+          if (doc.data().email == obj.email) {
+            times = doc.data().times
+          }
+        }
+      }
+    });
+    commit("SET_HISTORY", times)
+   }
   },
   modules: {},
   getters:{
@@ -275,6 +343,9 @@ export default new Vuex.Store({
     },
     getStudents:state=>()=>{
       return state.students;
+    },
+    getHistories:state=>()=>{
+      return state.histories;
     }
   },
   plugins: [createPersistedState()],

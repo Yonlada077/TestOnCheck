@@ -77,6 +77,7 @@
 import HomePhoto from "@/components/HomePhoto.vue";
 import Time from '@/components/Time.vue';
 import firebase from 'firebase'
+import moment from "moment";
 export default {
   name: "CheckStudent",
   components: {
@@ -98,7 +99,8 @@ export default {
     async SubmitClass() {
       const flag = await this.$store.dispatch("checkCode", {id:this.$route.params.id,code:this.code,email:this.$store.state.user.email})
       if(flag){
-        this.$router.push({ name: "CheckSuccessStudent" });
+        this.$store.dispatch("addHistory", {email:this.$store.state.user.email, classId:this.$route.params.id, date:moment().format('llll')}) //moment().subtract(1, 'days').calendar() moment().format('llll')
+        this.$router.push({ name: "CheckSuccessStudent", params:{id:this.$route.params.id} });
       }
       
     },

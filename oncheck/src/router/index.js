@@ -63,7 +63,7 @@ Vue.use(VueRouter)
     component: CheckStudent
   },
   {
-    path: '/checkSuccessStudent',
+    path: '/checkSuccessStudent/:id',
     name: 'CheckSuccessStudent',
     component: CheckSuccessStudent
   },

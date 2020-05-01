@@ -135,7 +135,7 @@ export default {
     },
     async logOut() {
        await firebase.auth().signOut()
-            this.$store.commit("CLEAR_STATE")
+      this.$store.commit("CLEAR_STATE")
       this.$router.push({ name: "Login" });
     },
     async getCourses(){
