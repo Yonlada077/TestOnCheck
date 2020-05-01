@@ -176,7 +176,6 @@ export default new Vuex.Store({
           }
         }
       });
-      console.log(id)
       let snapshot;
       if (snapshotRand.val() == obj.code) {
         snapshot = await db
@@ -197,6 +196,7 @@ export default new Vuex.Store({
               students: emails,
               date,
             });
+            return true
         } else {
           // Update obj
           emails = snapshot.data().students;
@@ -210,13 +210,16 @@ export default new Vuex.Store({
                 .update({
                   students: emails,
                 });
+                return true
             } else {
               alert("Students already in class");
+              return false
             }
           }
         }
       } else {
         alert("incorrect code");
+        return false
       }
       commit("");
     },

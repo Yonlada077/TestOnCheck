@@ -96,8 +96,11 @@ export default {
   },
   methods: {
     async SubmitClass() {
-      await this.$store.dispatch("checkCode", {id:this.$route.params.id,code:this.code,email:this.$store.state.user.email})
-      this.$router.push({ name: "CheckSuccessStudent" });
+      const flag = await this.$store.dispatch("checkCode", {id:this.$route.params.id,code:this.code,email:this.$store.state.user.email})
+      if(flag){
+        this.$router.push({ name: "CheckSuccessStudent" });
+      }
+      
     },
     goHome() {
       this.$router.push({ name: "HomeStudent" });

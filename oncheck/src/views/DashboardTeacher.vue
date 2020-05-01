@@ -131,8 +131,8 @@ export default {
       if(!this.$store.getters.getIsSearch){
         await this.$store.dispatch("getStudentsFromDate", {id:this.$route.params.id, date: moment().format("L")})
       }
+      this.$store.commit("SET_TRUE_SEARCH")
       this.students = this.$store.getters.getStudents()
-      console.log("student", this.students)
     },
     goHome() {
       this.$router.push({ name: "HomeTeacher" });
