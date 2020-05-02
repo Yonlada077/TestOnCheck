@@ -29,7 +29,9 @@
       </template>
       <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
     </v-menu>
-    <v-btn @click="search()">Search</v-btn>
+    <div class="d-flex justify-content-end">
+      <v-btn @click="search()">Search</v-btn>
+    </div>
   </div>
 </template>
 

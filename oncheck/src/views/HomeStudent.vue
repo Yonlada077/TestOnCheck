@@ -6,7 +6,7 @@
       prominent
     >
       <v-toolbar-title>
-        <img src="../assets/logo2.svg" width="150px" />
+        <img src="../assets/logo2.svg" width="150px" @click="goHome()"/>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>

@@ -2,7 +2,7 @@
   <v-card class="mx-auto overflow-y-auto overflow-x-hidden" height="100vh" width="100%">
     <v-app-bar class="dark-blue accent-4 h-70 d-flex justify-center flex-column position-fixed" dark prominent>
       <v-toolbar-title>
-        <img src="../assets/logo2.svg" width="150px" />
+        <img src="../assets/logo2.svg" width="150px" @click="goHome()"/>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
