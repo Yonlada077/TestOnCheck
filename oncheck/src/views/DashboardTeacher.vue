@@ -1,6 +1,10 @@
 <template>
   <v-card class="mx-auto overflow-y-auto overflow-x-hidden" height="100vh" width="100%">
-    <v-app-bar class="dark-blue accent-4 h-70 d-flex justify-center flex-column position-fixed" dark prominent>
+    <v-app-bar
+      class="dark-blue accent-4 h-70 d-flex justify-center flex-column position-fixed"
+      dark
+      prominent
+    >
       <v-toolbar-title>
         <img src="../assets/logo2.svg" width="150px" />
       </v-toolbar-title>
@@ -67,9 +71,16 @@
 
         <!-- card ประวัติเช็คชื่อ -->
 
-        <div class="d-flex align-items-center flex-column" style="margin-top:15px; overflow-y: auto; width:100%; height:330px;">
-
-          <div v-for="(student, index) in students" :key="index" class="card border-0 rounded-pill" style="width:100%; margin-bottom: 20px; height:65px;">
+        <div
+          class="d-flex align-items-center flex-column"
+          style="margin-top:15px; overflow-y: auto; width:100%; height:330px;"
+        >
+          <div
+            v-for="(student, index) in students"
+            :key="index"
+            class="card border-0 rounded-pill"
+            style="width:100%; margin-bottom: 20px; height:65px;"
+          >
             <div class="card-body d-flex justify-content-between">
               <div class="card-title">
                 <h6>{{student}}</h6>
@@ -79,7 +90,6 @@
               </div>
             </div>
           </div>
-
         </div>
 
         <div class="d-flex justify-content-end">
@@ -89,7 +99,7 @@
             height="50"
             color="#8DAAC8"
             elevation="3"
-            @click="startCheck()"
+            @click="exportFile()"
           >
             <span style="color:white">EXPORT</span>
           </v-btn>
@@ -100,39 +110,62 @@
 </template>
 
 <script>
-import HomePhoto from '@/components/HomePhoto.vue'
+import HomePhoto from "@/components/HomePhoto.vue";
 import DropdownSubject from "@/components/DropdownSubject.vue";
+import { ExportToCsv } from "export-to-csv";
 // import SelectDate from "@/components/SelectDate.vue";
 import moment from "moment";
-import firebase from 'firebase'
+import firebase from "firebase";
 export default {
   name: "DashboardTeacher",
 
   components: {
     HomePhoto,
-    DropdownSubject,
+    DropdownSubject
     // SelectDate
   },
   data: () => ({
     drawer: false,
     group: null,
-    students:null
+    students: null
   }),
-  created(){
-    this.getStudents()
+  created() {
+    this.getStudents();
   },
   watch: {
     group() {
       this.drawer = false;
-    },
+    }
   },
   methods: {
-    async getStudents(){
-      if(!this.$store.getters.getIsSearch){
-        await this.$store.dispatch("getStudentsFromDate", {id:this.$route.params.id, date: moment().format("L")})
+    async getStudents() {
+      if (!this.$store.getters.getIsSearch) {
+        await this.$store.dispatch("getStudentsFromDate", {
+          id: this.$route.params.id,
+          date: moment().format("L")
+        });
       }
-      this.$store.commit("SET_TRUE_SEARCH")
-      this.students = this.$store.getters.getStudents()
+      this.$store.commit("SET_TRUE_SEARCH");
+      this.students = this.$store.getters.getStudents();
+    },
+    exportFile() {
+      const options = {
+        fieldSeparator: ",",
+        quoteStrings: '"',
+        decimalSeparator: ".",
+        showLabels: true,
+        showTitle: true,
+        title: "รายชื่อนักเรียน",
+        useTextFile: false,
+        useBom: true,
+        useKeysAsHeaders: true
+        // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+      };
+      const data = this.students.map(s => {
+        return { studentId: s };
+      });
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(data);
     },
     goHome() {
       this.$router.push({ name: "HomeTeacher" });
@@ -141,8 +174,8 @@ export default {
       this.$router.push({ name: "DashboardTeacher" });
     },
     async logOut() {
-       await firebase.auth().signOut()
-          this.$store.commit("CLEAR_STATE") 
+      await firebase.auth().signOut();
+      this.$store.commit("CLEAR_STATE");
       this.$router.push({ name: "Login" });
     }
   }
